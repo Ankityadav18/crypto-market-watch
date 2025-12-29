@@ -1,50 +1,56 @@
-# Welcome to your Expo app 👋
+1.What the App Does
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Shows multiple crypto trading pairs (BTC, ETH, SOL, BNB, XRP, etc.)
 
-## Get started
+Displays:
+Trading pair
+Last traded price
+24h percentage change
+Prices update automatically every 2–3 seconds
+Prices randomly move up or down slightly
+Price text turns:
+Green when price goes up
+Red when price goes down
+Only the price text updates (no full row flashig)
+Sorting options:
 
-1. Install dependencies
+Sort by Price (High → Low)
+Sort by 24h % Change
+Sorting continues to work correctly while prices are updating
 
-   ```bash
-   npm install
-   ```
+2.Price Update Logic
 
-2. Start the app
+A custom hook (usePriceSimulator) is used for simulating price changes
+Inside the hook, setInterval runs every ~2.5 seconds.
 
-   ```bash
-   npx expo start
-   ```
+For each crypto:
 
-In the output, you'll find options to open the app in a
+A small random delta is applied to the current price
+New price is calculated
+24h percentage change is recalculated based on price movemen
+State updates use the functional form of setState to avoid stale values.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+3.How Re-renders Are Minimized
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+Sorting logic is wrapped in useMemo so it only recalculates when:
+Price data changes
+Sort option change
+Data is updated immutably, allowing React Native to update only what changed.
 
-## Get a fresh project
+UI updates are limited to the price text instead of re-rendering the entire list.
 
-When you're ready, run:
+The app is split into small components (screen, row, hook, data) to keep rendering efficient and readable.
 
-```bash
-npm run reset-project
-```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
 
-## Learn more
 
-To learn more about developing your project with Expo, look at the following resources:
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+Tech Stack:->
 
-## Join the community
+1.React Native
 
-Join our community of developers creating universal apps.
+2.Expo
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+3.JavaScript
+
+4.React Hooks (useState, useEffect, useMemo)
